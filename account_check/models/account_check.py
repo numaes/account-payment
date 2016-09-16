@@ -4,7 +4,7 @@
 # directory
 ##############################################################################
 from openerp import fields, models, _, api
-from openerp.exceptions import Warning
+from openerp.exceptions import Warning, ValidationError
 import logging
 import openerp.addons.decimal_precision as dp
 _logger = logging.getLogger(__name__)
@@ -300,6 +300,12 @@ class account_check(models.Model):
             'Check Number must be unique per Owner and Bank!',
             ['number', 'bank_id', 'owner_name', 'type']),
     ]
+
+    @api.one
+    @api.constrains('amount')
+    def _check_no_zero_amount(self):
+        if self.amount == 0:
+            raise ValidationError(_('Check amount should not be zero'))
 
     @api.one
     @api.onchange('issue_date', 'payment_date')
