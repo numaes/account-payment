@@ -19,7 +19,7 @@
                     <field name="checks_amount" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('payment_subtype','=', False)]}"/>
                 </field>
                 <field name="net_amount" position="attributes">
-                    <attribute name="attrs">{'invisible':[('payment_subtype','!=', False)]}</attribute>
+                    <attribute name="attrs">{'invisible':[('payment_subtype','!=', False)], 'required': True}</attribute>
                 </field>
             </field>
         </record> 
@@ -40,7 +40,7 @@
                     <field name="checks_amount" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('payment_subtype','=', False)]}"/>
                 </field>
                 <field name="net_amount" position="attributes">
-                    <attribute name="attrs">{'invisible':[('payment_subtype','!=', False)]}</attribute>
+                    <attribute name="attrs">{'invisible':[('payment_subtype','!=', False)], 'required':True}</attribute>
                 </field>
             </field>
         </record>
@@ -67,7 +67,7 @@
                     <field name="checks_amount" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('payment_subtype','=', False)]}"/>
                 </field>
                 <field name="net_amount" position="attributes">
-                    <attribute name="attrs">{'invisible':[('payment_subtype','!=', False)]}</attribute>
+                    <attribute name="attrs">{'invisible':[('payment_subtype','!=', False)], 'required':True}</attribute>
                 </field>
             </field>
         </record>
