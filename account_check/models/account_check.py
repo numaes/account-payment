@@ -64,7 +64,9 @@ class account_check(models.Model):
 
     name = fields.Char(
         compute='_get_name',
-        string=_('Number')
+        string=_('Number'),
+        # we store it to make migration easier
+        store=True,
     )
     number = fields.Integer(
         _('Number'),
@@ -231,10 +233,17 @@ class account_check(models.Model):
         string='Currency',
         readonly=True,
         related='voucher_id.journal_id.currency',
+        # we store it for making migration easier
+        store=True,
     )
+    # to make migration easier
     vat = fields.Char(
+        related='owner_vat',
+    )
+    owner_vat = fields.Char(
         # TODO rename to Owner VAT
         'Owner Vat',
+        oldname='vat',
         readonly=True,
         states={'draft': [('readonly', False)]}
     )
@@ -248,6 +257,11 @@ class account_check(models.Model):
         'Deposit Account Move',
         readonly=True,
         copy=False
+    )
+    deposit_date = fields.Date(
+        related='deposit_account_move_id.date',
+        store=True,
+        string='Fecha de Depósito',
     )
     # account move of return
     return_account_move_id = fields.Many2one(

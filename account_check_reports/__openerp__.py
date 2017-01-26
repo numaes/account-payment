@@ -19,30 +19,33 @@
 #
 ##############################################################################
 {
+    'name': 'Account Check Reports',
+    'version': '8.0.0.0.0',
+    'category': 'Localization/Argentina',
+    'sequence': 14,
     'author': 'ADHOC SA',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
-    'category': 'Accounting & Finance',
+    'summary': '',
+    'description': """
+Account Check Reports
+=====================
+    """,
+    'depends': [
+        'account_check',
+        'report_aeroo'
+    ],
+    'external_dependencies': {
+    },
     'data': [
-        'views/account_tax_withholding_view.xml',
-        'views/account_withholding_view.xml',
-        'views/account_voucher_view.xml',
-        'views/account_journal_view.xml',
-        'security/ir.model.access.csv',
+        'views/account_check_view.xml',
+        'report/account_check_deposit_report.xml',
     ],
     'demo': [
-        'demo/withholding_demo.xml',
     ],
-    'depends': [
-        'account_voucher_double_validation',
-        'account_voucher_withholding',
+    'test': [
     ],
-    'description': '''
-Account Voucher Withholding Automatic
-=====================================
-''',
     'installable': True,
-    'name': 'Voucher Voucher Withholding Automatic',
-    'test': [],
-    'version': '8.0.0.5.0',
+    'auto_install': False,
+    'application': False,
 }

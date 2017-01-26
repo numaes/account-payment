@@ -21,7 +21,22 @@ class account_voucher_withholding(models.Model):
         'account.voucher',
         'Voucher',
         required=True,
+        readonly=True,
         ondelete='cascade',
+    )
+    supplier_voucher_id = fields.Many2one(
+        'account.voucher',
+        string='Voucher',
+        # related field raise an error when creating new withholding from a
+        # voucher, we use compute without depends so it is not computed
+        # on onchange
+        # related='voucher_id',
+        compute='_get_supplier_voucher_id',
+        readonly=True
+    )
+    period_id = fields.Many2one(
+        related='voucher_id.period_id',
+        store=True,
     )
     display_name = fields.Char(
         compute='get_display_name'
@@ -65,6 +80,15 @@ class account_voucher_withholding(models.Model):
     comment = fields.Text(
         'Additional Information',
     )
+    base_amount = fields.Float(
+        'Base Amount',
+        digits=dp.get_precision('Account'),
+        readonly=True,
+        states={
+            'draft': [('readonly', False)],
+            'confirmed': [('readonly', False)]
+        },
+    )
     amount = fields.Float(
         'Amount',
         digits=dp.get_precision('Account'),
@@ -104,6 +128,10 @@ class account_voucher_withholding(models.Model):
     ]
 
     @api.one
+    def _get_supplier_voucher_id(self):
+        self.supplier_voucher_id = self.voucher_id
+
+    @api.one
     @api.depends('name', 'internal_number')
     def get_display_name(self):
         display_name = self.internal_number
@@ -128,3 +156,10 @@ class account_voucher_withholding(models.Model):
             sequence = tax_withholding.sequence_id
             vals['internal_number'] = sequence.next_by_id(sequence.id) or '/'
         return super(account_voucher_withholding, self).create(vals)
+
+    @api.one
+    def unlink(self):
+        if self.state not in ('draft', 'confirmed'):
+            raise Warning(_(
+                'Only withholding of vouchers on draft state can be deleted!'))
+        return super(account_voucher_withholding, self).unlink()
