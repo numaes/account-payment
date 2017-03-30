@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
-# For copyright and license notices, see __openerp__.py file in root directory
+# For copyright and license notices, see __odoo__.py file in root directory
 ##############################################################################
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 
 
 class AccountPaymentGroupInvoiceWizard(models.TransientModel):
@@ -104,7 +104,6 @@ class AccountPaymentGroupInvoiceWizard(models.TransientModel):
         line_values = invoice_line._convert_to_write(invoice_line._cache)
         line_values['price_unit'] = self.amount
         invoice.write({'invoice_line_ids': [(0, 0, line_values)]})
-        invoice.compute_taxes()
         invoice.signal_workflow('invoice_open')
         self.payment_group_id.to_pay_move_line_ids += (
             invoice.open_move_line_ids)

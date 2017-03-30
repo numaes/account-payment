@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from openerp import fields, models, api
-# from openerp.exceptions import ValidationError
+from odoo import fields, models, api
+# from odoo.exceptions import ValidationError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -81,9 +81,9 @@ class AccountPayment(models.Model):
     def _compute_payment_methods(self):
         for rec in self:
             if rec.payment_type in ('outbound', 'transfer'):
-                methods = rec.journal_id.outbound_payment_method_ids
+                methods = self.journal_id.outbound_payment_method_ids
             else:
-                methods = rec.journal_id.inbound_payment_method_ids
+                methods = self.journal_id.inbound_payment_method_ids
             rec.payment_method_ids = methods
 
     @api.onchange('payment_type')
